@@ -3,6 +3,7 @@ package mysql
 import (
 	"fmt"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,7 +12,7 @@ const (
 	DB_PORT = 3306
 	DB_NAME = "rest-db"
 	DB_USER = "root"
-	DB_PASS = "secret"
+	DB_PASS = "root"
 )
 
 var db *sqlx.DB
@@ -37,20 +38,17 @@ func GetConnectionDB() (*sqlx.DB, error) {
 
 func migrate(db *sqlx.DB) error {
 	var clientSchema = `
-	CREATE DATABASE IF NOT EXISTS restaurant;
+    CREATE TABLE IF NOT EXISTS clients (
+        id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+        nome varchar(20) DEFAULT NULL,
+        email varchar(50) DEFAULT NULL,
+        telefone varchar(20) DEFAULT NULL,  -- Corrigido de 'tst' para 'varchar(20)'
+        feedbacks text,
+        orders text,
+        PRIMARY KEY (id),
+        UNIQUE KEY email (email)
+    )`
 
-	USE restaurant;
-
-	CREATE TABLE IF NOT EXISTS clients (
-		id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		nome varchar(20) DEFAULT NULL,
-		email varchar(50) DEFAULT NULL,
-		telefone tst,
-		feedbacks text,
-		orders text,
-		PRIMARY KEY (id)
-		UNIQUE KEY email (email)
-	);`
 	_, err := db.Exec(clientSchema)
 
 	if err != nil {

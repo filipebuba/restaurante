@@ -9,3 +9,12 @@ type Cliente struct {
 	Feedbacks []Feedback `json:"feedbacks"` // Relacionamento: um cliente pode deixar muitos feedbacks
 	Orders    []Order    `json"orders"`     // Relacionamento: um cliente pode fazer muitos pedidos
 }
+
+type Cliente struct {
+	ID        int64  `json:"id"`
+	Nome      string `json:"nome"`
+	Email     string `json:"email"`
+	Telefone  string `json:"telefone"`
+	Feedbacks string `json:"feedbacks"` // Campo feedbacks do tipo string
+	Orders    string `json:"orders"`
+}
