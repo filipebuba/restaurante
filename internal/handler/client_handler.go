@@ -22,15 +22,25 @@ func NewHandler(clientService ports.ClienteService) *handler {
 
 // Handlers para Clientes
 func (h *handler) GetClientes(c *gin.Context) {
-	c.JSON(http.StatusOK, clientes)
+	result, err := h.clientService.GetAllClientes(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }
 
 func (h *handler) CreateCliente(c *gin.Context) {
 	var newCliente domain.Cliente
 
 	if err := c.ShouldBindJSON(&newCliente); err == nil {
-		clientes = append(clientes, newCliente)
-		c.JSON(http.StatusCreated, newCliente)
+		//clientes = append(clientes, newCliente)
+		client, err := h.clientService.CreateCliente(c, newCliente)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		c.JSON(http.StatusCreated, client)
 	} else {
 		c.JSON(http.StatusBadRequest, err)
 	}

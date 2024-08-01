@@ -20,20 +20,21 @@ func NewMySQLRepository(connect *sqlx.DB) ports.ClienteRepository {
 	}
 }
 
-func (r *clientRepositoryImpl) GetAllClientes(ctx context.Context, limit int, searchAfter []interface{}) ([]domain.Cliente, interface{}, error) {
+func (r *clientRepositoryImpl) GetAllClientes(ctx context.Context) ([]domain.Cliente, error) {
 	var client []domain.Cliente
 
 	err := r.connect.Select(&client, "SELECT * FROM clients LIMIT 20")
 	if err != nil {
-		return client, nil, fmt.Errorf("error getting all client: %w", err)
+		return client, fmt.Errorf("error getting all client: %w", err)
 	}
 
-	return client, nil, nil
+	return client, nil
 }
 
 func (r *clientRepositoryImpl) CreateCliente(ctx context.Context, client domain.Cliente) (*domain.Cliente, error) {
-	result, err := r.connect.Exec("INSERT INTO clients (name, email, telefone, feedbacks, orders) VALUES (?, ?,?,?,?)", client.Nome, client.Email, client.Telefone, client.Feedbacks, client.Orders)
+	result, err := r.connect.Exec("INSERT INTO clients (nome, email, telefone, feedbacks, orders) VALUES (?,?,?,?,?)", client.Nome, client.Email, client.Telefone, "ok", "ok orders")
 	if err != nil {
+		fmt.Println(err.Error())
 		return nil, fmt.Errorf("error creating client: %w", err)
 	}
 

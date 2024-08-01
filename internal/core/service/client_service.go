@@ -18,8 +18,8 @@ func NewService(repo ports.ClienteRepository) ports.ClienteService {
 	}
 }
 
-func (s clientServiceImpl) GetAllClientes(ctx context.Context, limit int, cursor []interface{}) ([]domain.Cliente, interface{}, error) {
-	return s.repo.GetAllClientes(ctx, limit, cursor)
+func (s clientServiceImpl) GetAllClientes(ctx context.Context) ([]domain.Cliente, error) {
+	return s.repo.GetAllClientes(ctx)
 }
 
 func (s clientServiceImpl) CreateCliente(ctx context.Context, client domain.Cliente) (*domain.Cliente, error) {
