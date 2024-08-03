@@ -63,3 +63,16 @@ func (s clientServiceImpl) DeleteCliente(ctx context.Context, id string) error {
 	}
 	return nil
 }
+
+func (s clientServiceImpl) GetClienteByID(ctx context.Context, id string) (*domain.Cliente, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id cannot be empty")
+	}
+
+	cliente, err := s.repo.GetClienteByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("error in repository: %w", err)
+	}
+
+	return cliente, nil
+}

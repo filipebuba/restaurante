@@ -65,3 +65,14 @@ func (r *clientRepositoryImpl) DeleteCliente(ctx context.Context, id string) err
 
 	return nil
 }
+
+func (r *clientRepositoryImpl) GetClienteByID(ctx context.Context, id string) (*domain.Cliente, error){
+	var client domain.Cliente
+
+	err := r.connect.Get(&client, "SELECT * FROM clients WHERE id=?", id)
+	if err != nil {
+		return nil, fmt.Errorf("error getting client by ID: %w", err)
+	}
+
+	return &client, nil
+}
