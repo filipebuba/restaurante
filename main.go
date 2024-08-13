@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/filipebuba/restaurante/internal/core/service"
-	"github.com/filipebuba/restaurante/internal/handler"
+	handlers "github.com/filipebuba/restaurante/internal/handler"
 	mysqlrepo "github.com/filipebuba/restaurante/internal/repositories/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +22,7 @@ func main() {
 
 	// Endpoints para Cliente
 	r.GET("/clientes", h.GetClientes)
+	r.GET("/clientes/{id}", h.GetClienteByID)
 	r.POST("/clientes", h.CreateCliente)
 	r.PUT("/clientes/{id}", h.UpdateCliente)
 	r.DELETE("/clientes/{id}", h.DeleteCliente)
