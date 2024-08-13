@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/filipebuba/restaurante/internal/core/domain"
 	"github.com/filipebuba/restaurante/internal/core/ports"
@@ -50,7 +51,10 @@ func (s clientServiceImpl) UpdateCliente(ctx context.Context, editCliente domain
 
 	clientUpdated, err := s.repo.UpdateCliente(ctx, editCliente)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository: %w", err)
+		if strings.Contains(err.Error(), "Unknown column 'name'") {
+            return nil, fmt.Errorf("error updating client: column 'name' does not exist in the database")
+        }
+        return nil, fmt.Errorf("error updating client in repository: %w", err)
 	}
 
 	return clientUpdated, nil

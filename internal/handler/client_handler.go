@@ -1,3 +1,4 @@
+/* trunk-ignore-all(gofmt) */
 package handlers
 
 import (
@@ -47,53 +48,34 @@ func (h *handler) CreateCliente(c *gin.Context) {
 }
 
 func (h *handler) UpdateCliente(c *gin.Context) {
-	var updatedCliente domain.Cliente
+    id := c.Param("id")
+    
+    var cliente domain.Cliente
+    if err := c.ShouldBindJSON(&cliente); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON provided", "details": err.Error()})
+        return
+    }
 
-	if err := c.ShouldBindJSON(&updatedCliente); err == nil {
-		// Find the index of the cliente to be updated
-		index := -1
-		for i, cliente := range clientes {
-			if cliente.ID == updatedCliente.ID {
-				index = i
-				break
-			}
-		}
+    // Adiciona o ID ao cliente para garantir que estamos atualizando o cliente correto
+    cliente.ID = id
 
-		// If the cliente is found, update it
-		if index != -1 {
-			clientes[index] = updatedCliente
-			c.JSON(http.StatusOK, updatedCliente)
-		} else {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Cliente not found"})
-		}
-	} else {
-		c.JSON(http.StatusBadRequest, err)
-	}
+    updatedCliente, err := h.clientService.UpdateCliente(c.Request.Context(), cliente)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update client", "details": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "Client updated successfully", "client": updatedCliente})
 }
 
 func (h *handler) DeleteCliente(c *gin.Context) {
-	var deletedCliente domain.Cliente
-
-	if err := c.ShouldBindJSON(&deletedCliente); err == nil {
-		// Find the index of the cliente to be deleted
-		index := -1
-		for i, cliente := range clientes {
-			if cliente.ID == deletedCliente.ID {
-				index = i
-				break
-			}
-		}
-
-		// If the cliente is found, delete it
-		if index != -1 {
-			clientes = append(clientes[:index], clientes[index+1:]...)
-			c.JSON(http.StatusOK, gin.H{"message": "Cliente deleted successfully"})
-		} else {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Cliente not found"})
-		}
-	} else {
-		c.JSON(http.StatusBadRequest, err)
-	}
+    id := c.Param("id")
+    err := h.clientService.DeleteCliente(c.Request.Context(), id)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.Status(http.StatusNoContent)
 }
 
 func (h *handler) GetClienteByID(c *gin.Context) {

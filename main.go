@@ -22,10 +22,10 @@ func main() {
 
 	// Endpoints para Cliente
 	r.GET("/clientes", h.GetClientes)
-	r.GET("/clientes/{id}", h.GetClienteByID)
+	r.GET("/clientes/:id", h.GetClienteByID)
 	r.POST("/clientes", h.CreateCliente)
-	r.PUT("/clientes/{id}", h.UpdateCliente)
-	r.DELETE("/clientes/{id}", h.DeleteCliente)
+	r.PUT("/clientes/:id", h.UpdateCliente)
+	r.DELETE("/clientes/:id", h.DeleteCliente)
 
 	// Endpoints para Funcionário
 	//r.GET("/funcionarios", getFuncionarios)

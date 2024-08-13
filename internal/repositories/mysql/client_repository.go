@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"strconv"
 
@@ -49,12 +50,24 @@ func (r *clientRepositoryImpl) CreateCliente(ctx context.Context, client domain.
 }
 
 func (r *clientRepositoryImpl) UpdateCliente(ctx context.Context, editCliente domain.Cliente) (*domain.Cliente, error) {
-	_, err := r.connect.ExecContext(ctx, "UPDATE clients SET name=?, email=?, telefone=?, feedbacks=?, orders=? WHERE id=?", editCliente.Nome, editCliente.Email, editCliente.Telefone, editCliente.Feedbacks, editCliente.Orders, editCliente.ID)
-	if err != nil {
-		return nil, fmt.Errorf("error updating client: %w", err)
-	}
+    query := `
+        UPDATE clients 
+        SET name = ?, email = ?, telefone = ?, feedbacks = ?, orders = ? 
+        WHERE id = ?
+    `
+    _, err := r.connect.ExecContext(ctx, query, 
+        editCliente.Nome, 
+        editCliente.Email, 
+        editCliente.Telefone, 
+        editCliente.Feedbacks, 
+        editCliente.Orders, 
+        editCliente.ID,
+    )
+    if err != nil {
+        return nil, fmt.Errorf("error updating client: %w", err)
+    }
 
-	return &editCliente, nil
+    return &editCliente, nil
 }
 
 func (r *clientRepositoryImpl) DeleteCliente(ctx context.Context, id string) error {
@@ -66,11 +79,14 @@ func (r *clientRepositoryImpl) DeleteCliente(ctx context.Context, id string) err
 	return nil
 }
 
-func (r *clientRepositoryImpl) GetClienteByID(ctx context.Context, id string) (*domain.Cliente, error){
+func (r *clientRepositoryImpl) GetClienteByID(ctx context.Context, id string) (*domain.Cliente, error) {
 	var client domain.Cliente
 
 	err := r.connect.Get(&client, "SELECT * FROM clients WHERE id=?", id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("client not found")
+		}
 		return nil, fmt.Errorf("error getting client by ID: %w", err)
 	}
 
