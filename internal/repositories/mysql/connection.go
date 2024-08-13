@@ -8,9 +8,8 @@ import (
 )
 
 const (
-	DB_HOST = "127.0.0.1"
-	DB_PORT = 3306
-	DB_NAME = "rest-db"
+	DB_HOST = "127.0.0.1:3306"
+	DB_NAME = "restaurant"
 	DB_USER = "root"
 	DB_PASS = "root"
 )
@@ -60,5 +59,6 @@ func migrate(db *sqlx.DB) error {
 }
 
 func dbConnectionURL() string {
-	return "root:root@tcp(localhost:3306)/restaurant?charset=utf8&parseTime=True"
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True", DB_USER, DB_PASS, DB_HOST, DB_NAME)
+	//return "root:root@tcp(localhost:3306)/restaurant?charset=utf8&parseTime=True"
 }

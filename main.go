@@ -1,8 +1,9 @@
+/* trunk-ignore-all(gofmt) */
 package main
 
 import (
 	"github.com/filipebuba/restaurante/internal/core/service"
-	"github.com/filipebuba/restaurante/internal/handler"
+	handlers "github.com/filipebuba/restaurante/internal/handlers/clients"
 	mysqlrepo "github.com/filipebuba/restaurante/internal/repositories/mysql"
 	"github.com/gin-gonic/gin"
 )
@@ -21,10 +22,11 @@ func main() {
 	h := handlers.NewHandler(service)
 
 	// Endpoints para Cliente
-	r.GET("/clientes", h.GetClientes)
-	r.POST("/clientes", h.CreateCliente)
-	r.PUT("/clientes/{id}", h.UpdateCliente)
-	r.DELETE("/clientes/{id}", h.DeleteCliente)
+	r.GET("/clients", h.GetClientes)
+	r.GET("/clients/:id", h.GetClienteByID)
+	r.POST("/clients", h.CreateCliente)
+	r.PUT("/clients/:id", h.UpdateCliente)
+	r.DELETE("/clients/:id", h.DeleteCliente)
 
 	// Endpoints para Funcionário
 	//r.GET("/funcionarios", getFuncionarios)

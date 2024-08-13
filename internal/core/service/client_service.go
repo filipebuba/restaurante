@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/filipebuba/restaurante/internal/core/domain"
 	"github.com/filipebuba/restaurante/internal/core/ports"
@@ -18,8 +19,8 @@ func NewService(repo ports.ClienteRepository) ports.ClienteService {
 	}
 }
 
-func (s clientServiceImpl) GetAllClientes(ctx context.Context, limit int, cursor []interface{}) ([]domain.Cliente, interface{}, error) {
-	return s.repo.GetAllClientes(ctx, limit, cursor)
+func (s clientServiceImpl) GetAllClientes(ctx context.Context) ([]domain.Cliente, error) {
+	return s.repo.GetAllClientes(ctx)
 }
 
 func (s clientServiceImpl) CreateCliente(ctx context.Context, client domain.Cliente) (*domain.Cliente, error) {
@@ -50,7 +51,10 @@ func (s clientServiceImpl) UpdateCliente(ctx context.Context, editCliente domain
 
 	clientUpdated, err := s.repo.UpdateCliente(ctx, editCliente)
 	if err != nil {
-		return nil, fmt.Errorf("error in repository: %w", err)
+		if strings.Contains(err.Error(), "Unknown column 'name'") {
+            return nil, fmt.Errorf("error updating client: column 'name' does not exist in the database")
+        }
+        return nil, fmt.Errorf("error updating client in repository: %w", err)
 	}
 
 	return clientUpdated, nil
@@ -62,4 +66,17 @@ func (s clientServiceImpl) DeleteCliente(ctx context.Context, id string) error {
 		return fmt.Errorf("error in repository: %w", err)
 	}
 	return nil
+}
+
+func (s clientServiceImpl) GetClienteByID(ctx context.Context, id string) (*domain.Cliente, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id cannot be empty")
+	}
+
+	cliente, err := s.repo.GetClienteByID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("error in repository: %w", err)
+	}
+
+	return cliente, nil
 }
