@@ -1,4 +1,3 @@
-/* trunk-ignore-all(gofmt) */
 package handlers
 
 import (

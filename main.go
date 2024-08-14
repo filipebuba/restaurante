@@ -1,8 +1,9 @@
+/* trunk-ignore-all(gofmt) */
 package main
 
 import (
 	"github.com/filipebuba/restaurante/internal/core/service"
-	handlers "github.com/filipebuba/restaurante/internal/handler"
+	handlers "github.com/filipebuba/restaurante/internal/handlers/clients"
 	mysqlrepo "github.com/filipebuba/restaurante/internal/repositories/mysql"
 	"github.com/gin-gonic/gin"
 )
