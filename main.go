@@ -21,11 +21,11 @@ func main() {
 	h := handlers.NewHandler(service)
 
 	// Endpoints para Cliente
-	r.GET("/clientes", h.GetClientes)
-	r.GET("/clientes/:id", h.GetClienteByID)
-	r.POST("/clientes", h.CreateCliente)
-	r.PUT("/clientes/:id", h.UpdateCliente)
-	r.DELETE("/clientes/:id", h.DeleteCliente)
+	r.GET("/clients", h.GetClientes)
+	r.GET("/clients/:id", h.GetClienteByID)
+	r.POST("/clients", h.CreateCliente)
+	r.PUT("/clients/:id", h.UpdateCliente)
+	r.DELETE("/clients/:id", h.DeleteCliente)
 
 	// Endpoints para Funcionário
 	//r.GET("/funcionarios", getFuncionarios)

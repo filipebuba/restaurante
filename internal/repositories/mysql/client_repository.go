@@ -33,7 +33,7 @@ func (r *clientRepositoryImpl) GetAllClientes(ctx context.Context) ([]domain.Cli
 }
 
 func (r *clientRepositoryImpl) CreateCliente(ctx context.Context, client domain.Cliente) (*domain.Cliente, error) {
-	result, err := r.connect.Exec("INSERT INTO clients (nome, email, telefone, feedbacks, orders) VALUES (?,?,?,?,?)", client.Nome, client.Email, client.Telefone, "ok", "ok orders")
+	result, err := r.connect.Exec("INSERT INTO clients (nome, email, telefone, feedbacks, orders) VALUES (?,?,?,?,?)", client.Nome, client.Email, client.Telefone, client.Feedbacks, client.Orders)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, fmt.Errorf("error creating client: %w", err)
@@ -52,7 +52,7 @@ func (r *clientRepositoryImpl) CreateCliente(ctx context.Context, client domain.
 func (r *clientRepositoryImpl) UpdateCliente(ctx context.Context, editCliente domain.Cliente) (*domain.Cliente, error) {
     query := `
         UPDATE clients 
-        SET name = ?, email = ?, telefone = ?, feedbacks = ?, orders = ? 
+        SET nome = ?, email = ?, telefone = ?, feedbacks = ?, orders = ? 
         WHERE id = ?
     `
     _, err := r.connect.ExecContext(ctx, query, 
