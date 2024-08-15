@@ -2,10 +2,10 @@ package domain
 
 // Cliente representa um cliente do restaurante
 type Cliente struct {
-	ID        string `json:"id"`
-	Nome      string `json:"nome"`
-	Telefone  string `json:"telefone"`
-	Email     string `json:"email"`
-	Feedbacks string `json:"feedbacks"` // Relacionamento: um cliente pode deixar muitos feedbacks
-	Orders    string `json"orders"`     // Relacionamento: um cliente pode fazer muitos pedidos
+	ID        string 
+	Nome      string 
+	Telefone  string 
+	Email     string 
+	Feedbacks string  // Relacionamento: um cliente pode deixar muitos feedbacks
+	Orders    string    // Relacionamento: um cliente pode fazer muitos pedidos
 }
